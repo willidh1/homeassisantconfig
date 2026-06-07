@@ -1,0 +1,52 @@
+# ============================================
+# STANDALONE CAMERA DISCOVERY SCRIPT
+# ============================================
+# Copy ONLY this script into your existing scripts.yaml
+# This will NOT overwrite anything - just add it to the end
+
+discover_cameras:
+  alias: "Discover All Camera Entities"
+  icon: mdi:camera-search
+  description: "Find all camera and switch entities in your Home Assistant"
+  sequence:
+    - service: notify.mobile_app_pixel_8
+      data:
+        title: "🎥 Camera Discovery"
+        message: >
+          Checking for camera entities...
+          Go to Developer Tools → States and search for:
+          - "camera."
+          - "switch." (look for ones with "camera" in the name)
+          
+          Or check Settings → Devices & Services → Google Nest
+    - service: system_log.write
+      data:
+        message: >
+          === CAMERA DISCOVERY ===
+          Please check Developer Tools → States for entities starting with:
+          - camera.
+          - switch. (containing 'camera')
+          
+          Common Google Nest camera entity patterns:
+          - camera.front_door
+          - camera.back_garden
+          - camera.driveway
+          - switch.front_door_camera
+          - switch.back_garden_camera
+        level: warning
+
+# ============================================
+# INSTRUCTIONS TO ADD THIS SAFELY
+# ============================================
+# 1. On your Home Assistant server, open /config/scripts.yaml
+# 2. Scroll to the very bottom of the file
+# 3. Copy the "discover_cameras:" section above (lines 7-35)
+# 4. Paste it at the end of your scripts.yaml
+# 5. Save the file
+# 6. Restart Home Assistant
+# 7. Go to Developer Tools → Services
+# 8. Search for "script.discover_cameras"
+# 9. Click CALL SERVICE
+# 10. Check Developer Tools → States for your camera entities
+
+# Made with Bob

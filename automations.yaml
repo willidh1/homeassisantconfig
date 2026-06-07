@@ -1,0 +1,431 @@
+- id: '1659172417070'
+  alias: Doorbell on TV
+  description: ''
+  trigger:
+  - platform: device
+    device_id: a75832e48c188b5205178dd0511e0253
+    domain: nest
+    type: doorbell_chime
+  condition: []
+  action:
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.sony_kd_65a8
+    data:
+      media_content_id: media-source://media_source/local/Dixie-land-doorbell-sound.mp3
+      media_content_type: audio/mpeg
+    metadata:
+      title: Dixie-land-doorbell-sound.mp3
+      thumbnail:
+      media_class: music
+      children_media_class:
+      navigateIds:
+      - {}
+      - media_content_type: app
+        media_content_id: media-source://media_source
+  mode: single
+- id: '1695584316495'
+  alias: Turn on wemo at 23:30
+  description: ''
+  trigger:
+  - platform: time
+    at: '23:30:00'
+  condition: []
+  action:
+  - type: turn_on
+    device_id: c90f887e3bcd4d82a9c94271de514a6b
+    entity_id: e0d6975f9bce3f31cbccd813e7d898c8
+    domain: switch
+  mode: single
+- id: '1695811447994'
+  alias: Wallbox Locked -> ESP32 Tri -> Yellow
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.wallbox_portal_status_description
+    to: Locked
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 8b1db09e02d83d6e1c54d3104ee209b6
+    entity_id: 3c9b0ee29f553539bb476a6b050165b0
+    domain: switch
+  - type: turn_on
+    device_id: 8b1db09e02d83d6e1c54d3104ee209b6
+    entity_id: e9bfc617825db33d230d9f4b80131350
+    domain: switch
+  - type: turn_off
+    device_id: 8b1db09e02d83d6e1c54d3104ee209b6
+    entity_id: cc2419bfa8b635c954fdddeb4081abdd
+    domain: switch
+  mode: single
+- id: '1695811505889'
+  alias: Wallbox Locked, car connected -> ESP32 Tri-Green+Blue
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.wallbox_portal_status_description
+    to: Locked, car connected
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 8b1db09e02d83d6e1c54d3104ee209b6
+    entity_id: 3c9b0ee29f553539bb476a6b050165b0
+    domain: switch
+  - type: turn_on
+    device_id: 8b1db09e02d83d6e1c54d3104ee209b6
+    entity_id: e9bfc617825db33d230d9f4b80131350
+    domain: switch
+  - type: turn_on
+    device_id: 8b1db09e02d83d6e1c54d3104ee209b6
+    entity_id: cc2419bfa8b635c954fdddeb4081abdd
+    domain: switch
+  mode: single
+- id: '1695811589281'
+  alias: Wallbox Charging -> ESP32 Tri-Blue
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.wallbox_portal_status_description
+    to: Charging
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 8b1db09e02d83d6e1c54d3104ee209b6
+    entity_id: 3c9b0ee29f553539bb476a6b050165b0
+    domain: switch
+  - type: turn_off
+    device_id: 8b1db09e02d83d6e1c54d3104ee209b6
+    entity_id: e9bfc617825db33d230d9f4b80131350
+    domain: switch
+  - type: turn_on
+    device_id: 8b1db09e02d83d6e1c54d3104ee209b6
+    entity_id: cc2419bfa8b635c954fdddeb4081abdd
+    domain: switch
+  mode: single
+- id: '1695879741179'
+  alias: Wallbox Waiting -> ESP32 Tri-Blue & Green
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.wallbox_portal_status_description
+    to: Waiting
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 8b1db09e02d83d6e1c54d3104ee209b6
+    entity_id: 3c9b0ee29f553539bb476a6b050165b0
+    domain: switch
+  - type: turn_on
+    device_id: 8b1db09e02d83d6e1c54d3104ee209b6
+    entity_id: e9bfc617825db33d230d9f4b80131350
+    domain: switch
+  - type: turn_on
+    device_id: 8b1db09e02d83d6e1c54d3104ee209b6
+    entity_id: cc2419bfa8b635c954fdddeb4081abdd
+    domain: switch
+  mode: single
+- id: '1700732309664'
+  alias: Eden arrived at home
+  description: ''
+  triggers:
+  - entity_id: device_tracker.edens_iphone
+    zone: zone.home
+    event: enter
+    trigger: zone
+  conditions: []
+  actions:
+  - action: notify.mobile_app_dannys_iphone_se_2024
+    data:
+      message: Eden is home
+      title: Eden status
+  mode: single
+- id: '1718622761783'
+  alias: When high electricity usage turn ESP Red LED on
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - sensor.octopus_energy_electricity_21l4280248_1012849659098_current_demand
+    above: 455
+  condition: []
+  action:
+  - service: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.esp32_1_esp32_red_led
+  mode: single
+- id: '1718627315277'
+  alias: When Electricity usage is low turn off Red LED
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - sensor.octopus_energy_electricity_21l4280248_1012849659098_current_demand
+    above: -0.2
+    below: 199.9
+  condition: []
+  action:
+  - service: switch.turn_off
+    target:
+      entity_id:
+      - switch.esp32_1_esp32_red_led
+    data: {}
+  mode: single
+- id: '1719593458038'
+  alias: Wallbox Disconnected
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.wallbox_portal_status_description
+    to: Disconnected
+  condition: []
+  action:
+  - service: notify.mobile_app_pixel_8
+    metadata: {}
+    data:
+      message: Wallbox Disconnected
+      title: Wallbox Disconnected
+  mode: single
+- id: '1720991380830'
+  alias: When sun sets turn on floor stander
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: 0
+  condition: []
+  action:
+  - service: light.turn_on
+    metadata: {}
+    data: {}
+    target:
+      device_id: e77049f3a4b3885fbcc4d1c52590d09a
+  mode: single
+- id: '1720991448687'
+  alias: When Sun rises turn off floor stander
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: 0
+  condition: []
+  action:
+  - service: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      device_id: e77049f3a4b3885fbcc4d1c52590d09a
+  mode: single
+- id: '1720991537774'
+  alias: Post is here
+  description: ''
+  triggers:
+  - type: motion
+    device_id: ddd315a7e39e50d02029f7db873b7d1b
+    entity_id: 921c18580905a315a4fddb55cc509911
+    domain: binary_sensor
+    trigger: device
+  conditions: []
+  actions:
+  - metadata: {}
+    data:
+      message: Post is here
+      title: Letterbox
+    action: notify.mobile_app_pixel_8
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.esp32_1_esp32_yellow_led
+  mode: single
+- id: '1744612093446'
+  alias: 'Hallway motion '
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.hallway
+    to: 'on'
+  conditions:
+  - condition: state
+    entity_id: device_tracker.dannys_iphone_se_2024
+    state: not_home
+  actions:
+  - action: notify.mobile_app_dannys_iphone_se_2024
+    metadata: {}
+    data:
+      message: Motion in the hallway
+      title: Hallway
+  mode: single
+- id: '1745223725790'
+  alias: Turn ESP32 Yellow LED off at midnight (reset postbox)
+  description: ''
+  triggers:
+  - trigger: time
+    at: 00:00:00
+  conditions: []
+  actions:
+  - action: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.esp32_1_esp32_yellow_led
+  mode: single
+- id: '1752850756179'
+  alias: Request Location Update Eden iPhone
+  description: ''
+  triggers: []
+  conditions: []
+  actions:
+  - action: notify.mobile_app_edens_iphone
+    metadata: {}
+    data:
+      message: request_location_update
+  mode: single
+- id: '1752850906013'
+  alias: Request location update Danny iPhone SE 2024
+  description: ''
+  triggers: []
+  conditions: []
+  actions:
+  - action: notify.mobile_app_dannys_iphone_se_2024
+    metadata: {}
+    data:
+      message: request_location_update
+  mode: single
+- id: '1768853054431'
+  alias: Turn on Dehumidifier when car charging
+  description: ''
+  triggers:
+  - entity_id:
+    - sensor.wallbox_portal_status_description
+    to: Charging
+    trigger: state
+  conditions: []
+  actions:
+  - action: humidifier.turn_on
+    metadata: {}
+    target:
+      device_id: 8f950ba590dd66261576da6794757876
+    data: {}
+  mode: single
+- id: '1768853544690'
+  alias: Turn off humidifier when car not charging
+  description: ''
+  triggers:
+  - entity_id:
+    - sensor.wallbox_portal_status_description
+    not_to: Charging
+    trigger: state
+  conditions: []
+  actions:
+  - action: humidifier.turn_off
+    metadata: {}
+    target:
+      device_id: 8f950ba590dd66261576da6794757876
+    data: {}
+  mode: single
+- id: '1768910112141'
+  alias: Turn on DUUX when Humidity high
+  description: ''
+  triggers:
+  - trigger: humidity.crossed_threshold
+    target:
+      device_id: 8f950ba590dd66261576da6794757876
+    options:
+      threshold:
+        type: above
+        value:
+          active_choice: number
+          number: 55
+      behavior: any
+  conditions: []
+  actions:
+  - action: humidifier.turn_on
+    metadata: {}
+    target:
+      entity_id: humidifier.duux_1_197934_duux_1_197934
+    data: {}
+  mode: single
+- id: '1768910297943'
+  alias: Turn off DUXX when humidity low
+  description: ''
+  triggers:
+  - trigger: climate.target_humidity_crossed_threshold
+    target:
+      device_id: 8f950ba590dd66261576da6794757876
+    options:
+      threshold:
+        type: below
+        value:
+          active_choice: number
+          number: 50
+      behavior: any
+  conditions: []
+  actions:
+  - action: humidifier.turn_off
+    metadata: {}
+    target:
+      entity_id: humidifier.duux_1_197934_duux_1_197934
+    data: {}
+  mode: single
+- id: '1771142711762'
+  alias: Tag 1 is scanned RED LED
+  description: ''
+  triggers:
+  - trigger: tag
+    tag_id: aee29a1e-bcd7-436b-b7ab-c33a57ec5012
+  conditions: []
+  actions:
+  - action: switch.toggle
+    metadata: {}
+    target:
+      entity_id: switch.esp32_1_esp32_red_led
+    data: {}
+  mode: single
+- id: '1774550666285'
+  alias: When Off Peak Electricity then Unlock Wallbox
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.octopus_energy_electricity_21l4280248_1012849659098_off_peak
+    to:
+    - 'on'
+  conditions: []
+  actions:
+  - action: lock.unlock
+    metadata: {}
+    target:
+      device_id: bdc01e8b53c35b6b084aeb0082890602
+    data: {}
+  - action: notify.mobile_app_pixel_8
+    metadata: {}
+    data:
+      title: Off peak electricy now
+      message: Is the car charging?
+  mode: single
+- id: '1774550719738'
+  alias: When not Off Peak Electricity then Lock Wallbox
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.octopus_energy_electricity_21l4280248_1012849659098_off_peak
+    to:
+    - 'off'
+  conditions: []
+  actions:
+  - action: lock.lock
+    metadata: {}
+    target:
+      device_id: bdc01e8b53c35b6b084aeb0082890602
+    data: {}
+  mode: single

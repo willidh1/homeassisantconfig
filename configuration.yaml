@@ -1,0 +1,118 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Example configuration.yaml entry for the HTTP component
+# was base_url: willidh.duckdns.org
+#  external_url: https://willidh.duckdns.org
+#  internal_url: http://homeassistant.local:8123
+
+#homeassistant:
+#  external_url: https://willidh.duckdns.org
+#  internal_url: https://192.168.1.120:8123
+
+http:
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
+
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# Pushbullet
+#sensor:
+#  - platform: pushbullet
+#    api_key: o.IXO4Ra40rTcmStYAMg7dBCMgBfZY0Ir2
+#    monitored_conditions:
+#      - body
+
+# Pushbullet notifier
+#notify:
+#  - name: Pushbullet
+#    platform: pushbullet
+#    api_key: o.IXO4Ra40rTcmStYAMg7dBCMgBfZY0Ir2
+    
+
+# Example configuration.yaml entry with automatic discovery enabled (by explicitly setting the discovery configuration item)
+wemo:
+  discovery: true
+  static:
+    - 192.168.1.112
+    
+# stream:
+# camera:
+#   - platform: mjpeg
+#    name: piCam
+#    mjpeg_url: "http://192.168.1.10:8081/mjpeg"
+
+# input_boolean:
+#  camera1_motion_detected:
+#    name: Camera1 - Motion detected
+#    icon: mdi:eye
+
+# arduino
+firmata:
+ - serial_port: /dev/ttyACM0
+   serial_baud_rate: 57600
+#   sampling_interval: 500
+   switches:
+     - name: arduino_led
+       pin_mode: OUTPUT
+       pin: 13
+#     - name: D1
+#       pin_mode: OUTPUT
+#       pin: 1
+#     - name: D2
+#       pin_mode: OUTPUT
+#       pin: 2
+#     - name: D3
+#       pin_mode: OUTPUT
+#       pin: 3
+#     - name: D4
+#       pin_mode: OUTPUT
+#       pin: 4
+#     - name: D5
+#       pin_mode: OUTPUT
+#       pin: 5
+     - name: D6-red
+       pin_mode: OUTPUT
+       pin: 6
+     - name: D7-green
+       pin_mode: OUTPUT
+       pin: 7
+#     - name: D8
+#       pin_mode: OUTPUT
+#       pin: 8
+   binary_sensors:
+#     - name: S9
+#       pin_mode: INPUT
+#       pin: 9
+     - name: S10
+       pin_mode: PULLUP
+       pin: 10
+       negate: true
+#     - name: S11
+#       pin_mode: INPUT
+#       pin: 11
+#     - name: S12
+#       pin_mode: INPUT
+#       pin: 12
+#   sensors:
+#      - name: A0
+#        pin_mode: ANALOG
+#        pin: A0
+#      - name: A1
+#        pin_mode: ANALOG
+#        pin: A1
+#      - name: A2
+#        pin_mode: ANALOG
+#        pin: A2
+#      - name: A3
+#        pin_mode: ANALOG
+#        pin: A3

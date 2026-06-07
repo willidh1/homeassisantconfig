@@ -1,0 +1,69 @@
+# ============================================
+# CAMERA ENTITY DISCOVERY SCRIPT
+# ============================================
+# This script will help you find all your camera entities
+# Add this to your scripts.yaml file, then run it from Developer Tools → Services
+
+discover_cameras:
+  alias: "Discover All Camera Entities"
+  icon: mdi:camera-search
+  description: "Find all camera and switch entities in your Home Assistant"
+  sequence:
+    # Get all camera entities
+    - service: notify.mobile_app_pixel_8
+      data:
+        title: "🎥 Camera Discovery"
+        message: >
+          Checking for camera entities...
+          Go to Developer Tools → States and search for:
+          - "camera."
+          - "switch." (look for ones with "camera" in the name)
+          
+          Or check Settings → Devices & Services → Google Nest
+    
+    # Log to Home Assistant logs
+    - service: system_log.write
+      data:
+        message: >
+          === CAMERA DISCOVERY ===
+          Please check Developer Tools → States for entities starting with:
+          - camera.
+          - switch. (containing 'camera')
+          
+          Common Google Nest camera entity patterns:
+          - camera.front_door
+          - camera.back_garden
+          - camera.driveway
+          - switch.front_door_camera
+          - switch.back_garden_camera
+        level: warning
+
+# ============================================
+# ALTERNATIVE: Template Sensor to List Cameras
+# ============================================
+# Add this to your configuration.yaml to create a sensor that lists all cameras
+
+# sensor:
+#   - platform: template
+#     sensors:
+#       all_cameras:
+#         friendly_name: "All Camera Entities"
+#         value_template: >
+#           {% set cameras = states.camera | map(attribute='entity_id') | list %}
+#           {% set switches = states.switch | selectattr('entity_id', 'search', 'camera') | map(attribute='entity_id') | list %}
+#           {{ (cameras + switches) | join(', ') }}
+
+# ============================================
+# INSTRUCTIONS
+# ============================================
+# 1. Copy the "discover_cameras" script above into your scripts.yaml
+# 2. Restart Home Assistant
+# 3. Go to Developer Tools → Services
+# 4. Search for "script.discover_cameras"
+# 5. Click "CALL SERVICE"
+# 6. Check your phone notification
+# 7. Go to Developer Tools → States
+# 8. Search for "camera" to see all camera entities
+# 9. Note down the entity IDs you find
+
+# Made with Bob

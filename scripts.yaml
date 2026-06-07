@@ -58,6 +58,40 @@ cameras_off_notify:
         title: "Security Cameras"
         message: "All cameras have been turned OFF"
 
+
+# ============================================
+# CAMERA DISCOVERY HELPER
+# ============================================
+discover_cameras:
+  alias: "Discover All Camera Entities"
+  icon: mdi:camera-search
+  description: "Find all camera and switch entities in your Home Assistant"
+  sequence:
+    - service: notify.mobile_app_pixel_8
+      data:
+        title: "🎥 Camera Discovery"
+        message: >
+          Checking for camera entities...
+          Go to Developer Tools → States and search for:
+          - "camera."
+          - "switch." (look for ones with "camera" in the name)
+          
+          Or check Settings → Devices & Services → Google Nest
+    - service: system_log.write
+      data:
+        message: >
+          === CAMERA DISCOVERY ===
+          Please check Developer Tools → States for entities starting with:
+          - camera.
+          - switch. (containing 'camera')
+          
+          Common Google Nest camera entity patterns:
+          - camera.front_door
+          - camera.back_garden
+          - camera.driveway
+          - switch.front_door_camera
+          - switch.back_garden_camera
+        level: warning
 # Individual camera toggle script (example)
 toggle_front_camera:
   alias: "Toggle Front Camera"

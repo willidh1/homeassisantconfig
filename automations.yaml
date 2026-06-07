@@ -429,3 +429,92 @@
       device_id: bdc01e8b53c35b6b084aeb0082890602
     data: {}
   mode: single
+# ============================================
+# GOOGLE NEST CAMERA AUTOMATIONS
+# ============================================
+# Replace CAMERA_NAME with your actual camera switch entity IDs
+# Example: switch.front_door_camera, switch.back_garden_camera
+
+- id: '1780000000001'
+  alias: Cameras ON when everyone leaves home
+  description: 'Turn on all cameras when both Danny and Eden leave home'
+  triggers:
+  - trigger: state
+    entity_id:
+    - device_tracker.dannys_iphone_se_2024
+    - device_tracker.edens_iphone
+    to: not_home
+  conditions:
+  - condition: state
+    entity_id: device_tracker.dannys_iphone_se_2024
+    state: not_home
+  - condition: state
+    entity_id: device_tracker.edens_iphone
+    state: not_home
+  actions:
+  - action: script.cameras_on_notify
+    data: {}
+  mode: single
+
+- id: '1780000000002'
+  alias: Cameras OFF when someone arrives home
+  description: 'Turn off all cameras when Danny or Eden arrives home'
+  triggers:
+  - trigger: state
+    entity_id:
+    - device_tracker.dannys_iphone_se_2024
+    - device_tracker.edens_iphone
+    to: home
+  conditions: []
+  actions:
+  - action: script.cameras_off_notify
+    data: {}
+  mode: single
+
+- id: '1780000000003'
+  alias: Cameras ON at night (11 PM)
+  description: 'Turn on all cameras at 11 PM for overnight security'
+  triggers:
+  - trigger: time
+    at: '23:00:00'
+  conditions: []
+  actions:
+  - action: script.cameras_on
+    data: {}
+  mode: single
+
+- id: '1780000000004'
+  alias: Cameras OFF in morning (7 AM)
+  description: 'Turn off cameras at 7 AM when people are typically home'
+  triggers:
+  - trigger: time
+    at: '07:00:00'
+  conditions:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: device_tracker.dannys_iphone_se_2024
+      state: home
+    - condition: state
+      entity_id: device_tracker.edens_iphone
+      state: home
+  actions:
+  - action: script.cameras_off
+    data: {}
+  mode: single
+
+- id: '1780000000005'
+  alias: Toggle cameras with NFC tag
+  description: 'Toggle all cameras on/off when Tag 2 is scanned'
+  triggers:
+  - trigger: tag
+    tag_id: REPLACE_WITH_YOUR_TAG_ID
+  conditions: []
+  actions:
+  - action: switch.toggle
+    target:
+      entity_id:
+      - switch.CAMERA_NAME_1
+      - switch.CAMERA_NAME_2
+      - switch.CAMERA_NAME_3
+  mode: single

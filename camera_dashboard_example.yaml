@@ -1,0 +1,154 @@
+# ============================================
+# GOOGLE NEST CAMERA DASHBOARD CONFIGURATION
+# ============================================
+# This is an example Lovelace dashboard card configuration
+# Copy this into your Home Assistant dashboard editor
+
+# OPTION 1: Simple Button Card for Camera Controls
+type: vertical-stack
+cards:
+  - type: markdown
+    content: |
+      ## 📹 Camera Controls
+  - type: horizontal-stack
+    cards:
+      - type: button
+        entity: script.cameras_on
+        name: All Cameras ON
+        icon: mdi:cctv
+        tap_action:
+          action: call-service
+          service: script.cameras_on
+        show_state: false
+      - type: button
+        entity: script.cameras_off
+        name: All Cameras OFF
+        icon: mdi:cctv-off
+        tap_action:
+          action: call-service
+          service: script.cameras_off
+        show_state: false
+
+# OPTION 2: Individual Camera Switches
+  - type: entities
+    title: Individual Cameras
+    entities:
+      - entity: switch.CAMERA_NAME_1
+        name: Front Door Camera
+        icon: mdi:cctv
+      - entity: switch.CAMERA_NAME_2
+        name: Back Garden Camera
+        icon: mdi:cctv
+      - entity: switch.CAMERA_NAME_3
+        name: Driveway Camera
+        icon: mdi:cctv
+
+# OPTION 3: Camera Feeds with Controls
+  - type: picture-glance
+    title: Front Door
+    camera_image: camera.CAMERA_NAME_1
+    entities:
+      - switch.CAMERA_NAME_1
+
+# OPTION 4: Conditional Card (shows different content based on camera state)
+  - type: conditional
+    conditions:
+      - entity: switch.CAMERA_NAME_1
+        state: 'on'
+    card:
+      type: markdown
+      content: |
+        ✅ Cameras are currently **ON** and recording
+
+# OPTION 5: Glance Card for Quick Overview
+  - type: glance
+    title: Camera Status
+    entities:
+      - entity: switch.CAMERA_NAME_1
+        name: Front
+      - entity: switch.CAMERA_NAME_2
+        name: Back
+      - entity: switch.CAMERA_NAME_3
+        name: Drive
+
+# ============================================
+# FULL DASHBOARD EXAMPLE
+# ============================================
+# Complete dashboard configuration you can use
+
+views:
+  - title: Security
+    icon: mdi:shield-home
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: markdown
+            content: |
+              ## 🏠 Home Security System
+          
+          # Quick Controls
+          - type: horizontal-stack
+            cards:
+              - type: button
+                entity: script.cameras_on_notify
+                name: Cameras ON
+                icon: mdi:cctv
+                tap_action:
+                  action: call-service
+                  service: script.cameras_on_notify
+                show_state: false
+                icon_height: 60px
+              - type: button
+                entity: script.cameras_off_notify
+                name: Cameras OFF
+                icon: mdi:cctv-off
+                tap_action:
+                  action: call-service
+                  service: script.cameras_off_notify
+                show_state: false
+                icon_height: 60px
+          
+          # Camera Status
+          - type: entities
+            title: Camera Status
+            show_header_toggle: false
+            entities:
+              - entity: switch.CAMERA_NAME_1
+                name: Front Door Camera
+                icon: mdi:cctv
+              - entity: switch.CAMERA_NAME_2
+                name: Back Garden Camera
+                icon: mdi:cctv
+              - entity: switch.CAMERA_NAME_3
+                name: Driveway Camera
+                icon: mdi:cctv
+          
+          # Camera Feeds
+          - type: picture-glance
+            title: Front Door
+            camera_image: camera.CAMERA_NAME_1
+            camera_view: live
+            entities:
+              - switch.CAMERA_NAME_1
+          
+          - type: picture-glance
+            title: Back Garden
+            camera_image: camera.CAMERA_NAME_2
+            camera_view: live
+            entities:
+              - switch.CAMERA_NAME_2
+
+# ============================================
+# INSTRUCTIONS
+# ============================================
+# 1. Replace all instances of CAMERA_NAME_1, CAMERA_NAME_2, etc. 
+#    with your actual camera entity IDs
+# 2. Go to your Home Assistant dashboard
+# 3. Click the three dots (⋮) in the top right
+# 4. Click "Edit Dashboard"
+# 5. Click "+ ADD CARD"
+# 6. Choose "Manual" at the bottom
+# 7. Paste the configuration you want to use
+# 8. Click "SAVE"
+
+# Made with Bob

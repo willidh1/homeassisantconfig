@@ -1,1 +1,70 @@
-{}
+# Google Nest Camera Control Scripts
+# Replace CAMERA_NAME with your actual camera entity IDs
+# Example: camera.front_door, camera.back_garden, camera.driveway
+
+# Script to turn all cameras ON
+cameras_on:
+  alias: "Turn All Cameras On"
+  icon: mdi:cctv
+  sequence:
+    - service: switch.turn_on
+      target:
+        entity_id:
+          - switch.CAMERA_NAME_1  # Replace with your camera switch entity
+          - switch.CAMERA_NAME_2  # Replace with your camera switch entity
+          - switch.CAMERA_NAME_3  # Add more cameras as needed
+
+# Script to turn all cameras OFF
+cameras_off:
+  alias: "Turn All Cameras Off"
+  icon: mdi:cctv-off
+  sequence:
+    - service: switch.turn_off
+      target:
+        entity_id:
+          - switch.CAMERA_NAME_1  # Replace with your camera switch entity
+          - switch.CAMERA_NAME_2  # Replace with your camera switch entity
+          - switch.CAMERA_NAME_3  # Add more cameras as needed
+
+# Script to turn cameras on with notification
+cameras_on_notify:
+  alias: "Turn Cameras On (with notification)"
+  icon: mdi:cctv
+  sequence:
+    - service: switch.turn_on
+      target:
+        entity_id:
+          - switch.CAMERA_NAME_1
+          - switch.CAMERA_NAME_2
+          - switch.CAMERA_NAME_3
+    - service: notify.mobile_app_pixel_8
+      data:
+        title: "Security Cameras"
+        message: "All cameras have been turned ON"
+
+# Script to turn cameras off with notification
+cameras_off_notify:
+  alias: "Turn Cameras Off (with notification)"
+  icon: mdi:cctv-off
+  sequence:
+    - service: switch.turn_off
+      target:
+        entity_id:
+          - switch.CAMERA_NAME_1
+          - switch.CAMERA_NAME_2
+          - switch.CAMERA_NAME_3
+    - service: notify.mobile_app_pixel_8
+      data:
+        title: "Security Cameras"
+        message: "All cameras have been turned OFF"
+
+# Individual camera toggle script (example)
+toggle_front_camera:
+  alias: "Toggle Front Camera"
+  icon: mdi:cctv
+  sequence:
+    - service: switch.toggle
+      target:
+        entity_id: switch.CAMERA_NAME_1
+
+# Made with Bob
